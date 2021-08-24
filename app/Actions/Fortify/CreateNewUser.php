@@ -2,7 +2,7 @@
 
 namespace App\Actions\Fortify;
 
-use App\Models\User;
+use Domain\Shared\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -15,7 +15,7 @@ class CreateNewUser implements CreatesNewUsers
     /**
      * Validate and create a newly registered user.
      */
-    public function create(array $input): \App\Models\User
+    public function create(array $input): \Domain\Shared\Models\User
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
