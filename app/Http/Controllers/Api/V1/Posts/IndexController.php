@@ -21,7 +21,7 @@ class IndexController extends Controller
             subject: Post::class,
         )->allowedIncludes(
             includes: ['user']
-        )->paginate(3);
+        )->paginate();
 
         return response()->json(
             data: PostResource::collection(
