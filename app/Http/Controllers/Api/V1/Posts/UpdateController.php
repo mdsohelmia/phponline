@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Api\V1\Posts;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Posts\UpdateRequest;
-use Domain\Blogging\Actions\UpdatePost;
+use App\Jobs\Posts\UpdatePost;
 use Domain\Blogging\Factories\PostFactory;
 use Domain\Blogging\Models\Post;
 use Illuminate\Http\Response;
@@ -16,18 +16,16 @@ class UpdateController extends Controller
 {
     public function __invoke(UpdateRequest $request, Post $post): Response
     {
-        // authorize
-
-        // update - background job
-        UpdatePost::handle(
-            object: PostFactory::create(
+        UpdatePost::dispatch(
+            $post->id,
+            PostFactory::create(
                 attributes: $request->validated(),
-            ),
-            post: $post,
+            )
         );
 
         return response(
-            content: null,status: Http::ACCEPTED,
+            content: null,
+            status: Http::ACCEPTED,
         );
     }
 }

@@ -15,8 +15,6 @@ class StoreController extends Controller
 {
     public function __invoke(StoreRequest $request): Response
     {
-        // authorize
-
         CreatePost::dispatch(
             PostFactory::create(
                 attributes: $request->validated(),
