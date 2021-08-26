@@ -2,18 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Jobs\Posts;
+namespace Domain\Blogging\Jobs;
 
-use Domain\Blogging\Actions\CreatePost as CreatePostAction;
+use Domain\Blogging\Models\Post;
 use Domain\Blogging\ValueObjects\PostValueObject;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class CreatePost implements ShouldQueue
+class UpdatePost implements ShouldQueue
 {
     use Queueable;
     use Dispatchable;
@@ -21,13 +20,13 @@ class CreatePost implements ShouldQueue
     use InteractsWithQueue;
 
     public function __construct(
+        public int $postID,
         public PostValueObject $object,
     ) {}
 
     public function handle(): void
     {
-        CreatePostAction::handle(
-            object: $this->object,
-        );
+        $post = Post::find($this->postID);
+        $post->update($this->object->toArray());
     }
 }
